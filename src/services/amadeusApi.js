@@ -51,20 +51,14 @@ class AmadeusService {
         max: 50,
       };
 
-      if (searchParams.returnDate) {
-        params.returnDate = searchParams.returnDate;
-      }
-
-      if (searchParams.travelClass) {
+      if (searchParams.returnDate) params.returnDate = searchParams.returnDate;
+      if (searchParams.travelClass)
         params.travelClass = searchParams.travelClass;
-      }
 
       const response = await axios.get(
         `${AMADEUS_API_BASE}/shopping/flight-offers`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           params,
         }
       );
@@ -89,9 +83,8 @@ class AmadeusService {
   }
 
   processFlightData(data) {
-    if (!data.data || data.data.length === 0) {
+    if (!data.data || data.data.length === 0)
       return { flights: [], dictionaries: {} };
-    }
 
     const flights = data.data.map((offer) => ({
       id: offer.id,
@@ -120,11 +113,9 @@ class AmadeusService {
       validatingAirlineCodes: offer.validatingAirlineCodes,
     }));
 
-    return {
-      flights,
-      dictionaries: data.dictionaries || {},
-    };
+    return { flights, dictionaries: data.dictionaries || {} };
   }
 }
 
-export default new AmadeusService();
+const amadeusService = new AmadeusService();
+export default amadeusService;
