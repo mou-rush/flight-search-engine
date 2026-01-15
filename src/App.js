@@ -11,6 +11,8 @@ import {
   MenuItem,
   Select,
   FormControl,
+  Fade,
+  Zoom,
 } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
 import SortIcon from "@mui/icons-material/Sort";
@@ -19,6 +21,11 @@ import SearchForm from "./components/SearchForm/SearchForm";
 import { FlightResults } from "./components/FlightResults/FlightResults";
 import Filters from "./components/Filters/Filters";
 import PriceGraph from "./components/PriceGraph/PriceGraph";
+import {
+  FiltersSkeleton,
+  PriceGraphSkeleton,
+  FlightResultsSkeleton,
+} from "./components/Common/SkeletonLoaders";
 import { useFlightSearch } from "./hooks/useFlightSearch";
 import { useFilters } from "./hooks/useFilters";
 import { sortFlights } from "./utils/flightDataProcessor";
@@ -47,6 +54,7 @@ function App() {
   };
 
   const sortedFlights = sortFlights(filteredFlights, sortBy);
+
   const enrichedFilterOptions = {
     ...filterOptions,
     airlines: filterOptions.airlines.map((airline) => ({
@@ -60,16 +68,26 @@ function App() {
       <CssBaseline />
 
       {/* Header */}
-      <AppBar position="static" elevation={0}>
+      <AppBar
+        position="static"
+        elevation={0}
+        sx={{
+          background: "linear-gradient(135deg, #213C46 0%, #051830 100%)",
+        }}
+      >
         <Toolbar>
-          <FlightIcon sx={{ mr: 2, fontSize: 32 }} />
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{ flexGrow: 1, fontWeight: 700 }}
-          >
-            MoSkySearch
-          </Typography>
+          <Zoom in timeout={500}>
+            <FlightIcon sx={{ mr: 2, fontSize: 32 }} />
+          </Zoom>
+          <Fade in timeout={700}>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{ flexGrow: 1, fontWeight: 700 }}
+            >
+              MoSkySearch
+            </Typography>
+          </Fade>
         </Toolbar>
       </AppBar>
 
@@ -79,104 +97,156 @@ function App() {
       {/* Results Section */}
       {hasSearched && (
         <Box sx={{ bgcolor: "background.default", minHeight: "100vh", py: 4 }}>
-          <Container maxWidth="xl">
-            {!loading && !error && flights.length > 0 && (
+          <Container minWidth="xl">
+            {loading ? (
+              /* Loading State with Skeletons */
               <>
-                {/* Price Graph */}
-                <PriceGraph flights={sortedFlights} />
-
+                <PriceGraphSkeleton />
                 <Grid container spacing={3}>
-                  {/* Filters Sidebar */}
                   <Grid item xs={12} md={3}>
-                    <Filters
-                      filters={filters}
-                      onFilterChange={handleFilterChange}
-                      priceRange={enrichedFilterOptions.priceRange}
-                      availableAirlines={enrichedFilterOptions.airlines}
-                      activeFiltersCount={activeFiltersCount}
-                    />
+                    <FiltersSkeleton />
                   </Grid>
-
-                  {/* Flight Results */}
                   <Grid item xs={12} md={9}>
-                    {/* Sort Controls */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        mb: 3,
-                        flexWrap: "wrap",
-                        gap: 2,
-                      }}
-                    >
-                      <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                        {sortedFlights.length} flights found
-                      </Typography>
-
-                      <FormControl size="small" sx={{ minWidth: 200 }}>
-                        <Select
-                          value={sortBy}
-                          onChange={handleSortChange}
-                          startAdornment={
-                            <SortIcon sx={{ mr: 1, color: "action.active" }} />
-                          }
-                        >
-                          <MenuItem value="price">Lowest Price</MenuItem>
-                          <MenuItem value="duration">
-                            Shortest Duration
-                          </MenuItem>
-                          <MenuItem value="stops">Fewest Stops</MenuItem>
-                          <MenuItem value="departure">
-                            Earliest Departure
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-
-                    <FlightResults
-                      flights={sortedFlights}
-                      dictionaries={dictionaries}
-                      loading={loading}
-                      error={error}
-                    />
+                    <FlightResultsSkeleton count={5} />
                   </Grid>
                 </Grid>
               </>
-            )}
+            ) : !error && flights.length > 0 ? (
+              /* Results with Data */
+              <Fade in timeout={500}>
+                <Box>
+                  {/* Price Graph */}
+                  <PriceGraph flights={sortedFlights} />
 
-            {!loading && !error && flights.length === 0 && hasSearched && (
-              <Box sx={{ textAlign: "center", py: 8 }}>
-                <FlightIcon
-                  sx={{ fontSize: 80, color: "text.secondary", mb: 2 }}
-                />
-                <Typography variant="h5" color="text.secondary" gutterBottom>
-                  No flights found
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Try adjusting your search criteria or dates
-                </Typography>
-              </Box>
-            )}
+                  <Grid container spacing={3}>
+                    {/* Filters Sidebar */}
+                    <Grid item xs={12} md={3}>
+                      <Filters
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        priceRange={enrichedFilterOptions.priceRange}
+                        availableAirlines={enrichedFilterOptions.airlines}
+                        activeFiltersCount={activeFiltersCount}
+                      />
+                    </Grid>
 
-            {error && (
-              <Box sx={{ textAlign: "center", py: 8 }}>
-                <Typography variant="h6" color="error" gutterBottom>
-                  {error}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Please try again or contact support if the issue persists
-                </Typography>
-              </Box>
-            )}
+                    {/* Flight Results */}
+                    <Grid item xs={12} md={9}>
+                      {/* Sort Controls */}
+                      <Fade in timeout={600}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: 3,
+                            flexWrap: "wrap",
+                            gap: 2,
+                          }}
+                        >
+                          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                            {sortedFlights.length}{" "}
+                            {sortedFlights.length === 1 ? "flight" : "flights"}{" "}
+                            found
+                          </Typography>
 
-            {loading && (
-              <Box sx={{ textAlign: "center", py: 8 }}>
-                <Typography variant="h6" color="text.secondary">
-                  Searching for the best flights...
-                </Typography>
-              </Box>
-            )}
+                          <FormControl
+                            size="small"
+                            sx={{
+                              minWidth: 200,
+                              "& .MuiOutlinedInput-root": {
+                                transition: "all 0.3s",
+                                "&:hover": {
+                                  transform: "scale(1.02)",
+                                },
+                              },
+                            }}
+                          >
+                            <Select
+                              value={sortBy}
+                              onChange={handleSortChange}
+                              startAdornment={
+                                <SortIcon
+                                  sx={{ mr: 1, color: "action.active" }}
+                                />
+                              }
+                            >
+                              <MenuItem value="price">Lowest Price</MenuItem>
+                              <MenuItem value="duration">
+                                Shortest Duration
+                              </MenuItem>
+                              <MenuItem value="stops">Fewest Stops</MenuItem>
+                              <MenuItem value="departure">
+                                Earliest Departure
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </Fade>
+
+                      <FlightResults
+                        flights={sortedFlights}
+                        dictionaries={dictionaries}
+                        loading={false}
+                        error={null}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Fade>
+            ) : !error && flights.length === 0 ? (
+              /* No Results */
+              <Fade in timeout={500}>
+                <Box sx={{ textAlign: "center", py: 8 }}>
+                  <Box
+                    sx={{
+                      display: "inline-block",
+                      animation: "float 3s ease-in-out infinite",
+                      "@keyframes float": {
+                        "0%, 100%": { transform: "translateY(0)" },
+                        "50%": { transform: "translateY(-20px)" },
+                      },
+                    }}
+                  >
+                    <FlightIcon
+                      sx={{
+                        fontSize: 80,
+                        color: "text.secondary",
+                        mb: 2,
+                      }}
+                    />
+                  </Box>
+                  <Typography
+                    variant="h5"
+                    color="text.secondary"
+                    gutterBottom
+                    sx={{ fontWeight: 600 }}
+                  >
+                    No flights found
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    Try adjusting your search criteria or dates
+                  </Typography>
+                </Box>
+              </Fade>
+            ) : error ? (
+              /* Error State */
+              <Fade in timeout={500}>
+                <Box sx={{ textAlign: "center", py: 8 }}>
+                  <Typography
+                    variant="h6"
+                    color="error"
+                    gutterBottom
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {error}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Please try again or contact support if the issue persists
+                  </Typography>
+                </Box>
+              </Fade>
+            ) : null}
           </Container>
         </Box>
       )}
@@ -192,9 +262,11 @@ function App() {
         }}
       >
         <Container maxWidth="lg">
-          <Typography variant="body2" align="center">
-            © 2026 MoSkySearch
-          </Typography>
+          <Fade in timeout={1000}>
+            <Typography variant="body2" align="center">
+              © 2026 MoSkySearch
+            </Typography>
+          </Fade>
         </Container>
       </Box>
     </ThemeProvider>
