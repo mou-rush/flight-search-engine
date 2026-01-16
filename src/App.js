@@ -10,12 +10,11 @@ import {
   Select,
   FormControl,
   Fade,
-  Zoom,
 } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
 import SortIcon from "@mui/icons-material/Sort";
 import theme from "./constants/theme";
-import SearchForm from "./components/Hero/Hero.jsx";
+import SearchForm from "./components/Hero/Hero";
 import { FlightResults } from "./components/FlightResults/FlightResults";
 import Filters from "./components/Filters/Filters";
 import PriceGraph from "./components/PriceGraph/PriceGraph";
@@ -23,7 +22,7 @@ import {
   FiltersSkeleton,
   PriceGraphSkeleton,
   FlightResultsSkeleton,
-} from "./components/Common/SkeletonLoaders/SkeletonLoaders.jsx";
+} from "./components/Common/SkeletonLoaders/SkeletonLoaders";
 import { useFlightSearch } from "./hooks/useFlightSearch";
 import { useFilters } from "./hooks/useFilters";
 import { sortFlights } from "./utils/flightDataProcessor";
