@@ -5,8 +5,6 @@ import {
   Container,
   Box,
   Grid,
-  AppBar,
-  Toolbar,
   Typography,
   MenuItem,
   Select,
@@ -17,7 +15,7 @@ import {
 import FlightIcon from "@mui/icons-material/Flight";
 import SortIcon from "@mui/icons-material/Sort";
 import theme from "./constants/theme";
-import SearchForm from "./components/SearchForm/SearchForm";
+import SearchForm from "./components/Hero/Hero.jsx";
 import { FlightResults } from "./components/FlightResults/FlightResults";
 import Filters from "./components/Filters/Filters";
 import PriceGraph from "./components/PriceGraph/PriceGraph";
@@ -25,7 +23,7 @@ import {
   FiltersSkeleton,
   PriceGraphSkeleton,
   FlightResultsSkeleton,
-} from "./components/Common/SkeletonLoaders";
+} from "./components/Common/SkeletonLoaders/SkeletonLoaders.jsx";
 import { useFlightSearch } from "./hooks/useFlightSearch";
 import { useFilters } from "./hooks/useFilters";
 import { sortFlights } from "./utils/flightDataProcessor";
@@ -68,28 +66,6 @@ function App() {
       <CssBaseline />
 
       {/* Header */}
-      <AppBar
-        position="static"
-        elevation={0}
-        sx={{
-          background: "linear-gradient(135deg, #213C46 0%, #051830 100%)",
-        }}
-      >
-        <Toolbar>
-          <Zoom in timeout={500}>
-            <FlightIcon sx={{ mr: 2, fontSize: 32 }} />
-          </Zoom>
-          <Fade in timeout={700}>
-            <Typography
-              variant="h5"
-              component="div"
-              sx={{ flexGrow: 1, fontWeight: 700 }}
-            >
-              MoSkySearch
-            </Typography>
-          </Fade>
-        </Toolbar>
-      </AppBar>
 
       {/* Search Form */}
       <SearchForm onSearch={handleSearch} loading={loading} />
@@ -255,8 +231,8 @@ function App() {
       <Box
         component="footer"
         sx={{
-          bgcolor: "primary.main",
-          color: "white",
+          bgcolor: "text.secondary",
+          color: "#80A2AA",
           py: 3,
           mt: "auto",
         }}
