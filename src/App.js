@@ -14,7 +14,7 @@ import {
 import FlightIcon from "@mui/icons-material/Flight";
 import SortIcon from "@mui/icons-material/Sort";
 import theme from "./constants/theme";
-import SearchForm from "./components/Hero/Hero";
+import SearchForm from "./components/FlightSearchForm/FlightSearchForm";
 import { FlightResults } from "./components/FlightResults/FlightResults";
 import Filters from "./components/Filters/Filters";
 import PriceGraph from "./components/PriceGraph/PriceGraph";

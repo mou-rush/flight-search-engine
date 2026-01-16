@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
 import FlightIcon from "@mui/icons-material/FlightTakeoff";
+import PropTypes from "prop-types";
 
 const MoSkySearchSingleSelectComplete = ({
   value,
@@ -111,3 +112,16 @@ const MoSkySearchSingleSelectComplete = ({
 };
 
 export default MoSkySearchSingleSelectComplete;
+
+MoSkySearchSingleSelectComplete.propTypes = {
+  value: PropTypes.object,
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  options: PropTypes.array.isRequired,
+  error: PropTypes.bool,
+  helperText: PropTypes.string,
+  icon: PropTypes.elementType,
+  renderOptionIcon: PropTypes.elementType,
+  inputSx: PropTypes.object,
+};

@@ -61,7 +61,7 @@ const theme = createTheme({
         contained: {
           boxShadow: "none",
           "&:hover": {
-            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+            boxShadow: COLORS.secondary,
           },
         },
       },
@@ -70,16 +70,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: 8,
-          },
+          boxShadow: COLORS.secondary,
         },
       },
     },
@@ -87,32 +78,31 @@ const theme = createTheme({
 });
 
 export default theme;
-
 export const inputStyle = {
-  "& .MuiOutlinedInput-root": {
+  "& .MuiOutlinedInput-root, & .MuiPickersOutlinedInput-root": {
     height: 64,
     borderRadius: 3,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: theme.palette.background.paper,
     backdropFilter: "blur(8px)",
     transition: "all 0.3s ease",
-    border: "2px solid transparent",
-    "&:hover": {
-      backgroundColor: "#FFFFFF",
-      borderColor: alpha(theme.palette.primary.main, 0.3),
-      transform: "translateY(-2px)",
-      boxShadow: "0 8px 25px -5px rgba(52, 207, 194, 0.15)",
+    "& fieldset": {
+      borderColor: alpha(theme.palette.primary.main, 0.2),
+      borderWidth: 2,
     },
-    "&.Mui-focused": {
-      backgroundColor: "#FFFFFF",
-      borderColor: theme.palette.primary.main,
-      boxShadow: `0 0 0 4px ${alpha(theme.palette.primary.main, 0.12)}`,
+    "&:hover fieldset": {
+      borderColor: theme.palette.secondary.main,
+    },
+
+    "&.Mui-focused fieldset": {
+      borderColor: theme.palette.secondary.main,
+      boxShadow: `0 0 0 4px ${alpha(theme.palette.secondary.main, 0.12)}`,
     },
   },
   "& .MuiInputLabel-root": {
     fontWeight: 600,
     color: theme.palette.text.secondary,
     "&.Mui-focused": {
-      color: theme.palette.primary.main,
+      color: theme.palette.secondary.main,
     },
   },
 };
