@@ -5,7 +5,7 @@ import Header from "../Header/Header";
 import { useFlightSearchForm } from "../../hooks/useFlightSearchForm";
 import { AnimatedBackground } from "../Common/AnimatedBackground/AnimatedBackground";
 import { HeroSection } from "../HeroSection/HeroSection";
-import SearchCard from "../SearchCard/SearchCard";
+import SearchCard from "./SearchCard";
 import { FeatureBadges } from "../FeatureBadges/FeatureBadges";
 
 const FlightSearchForm = ({ onSearch, loading = false }) => {
