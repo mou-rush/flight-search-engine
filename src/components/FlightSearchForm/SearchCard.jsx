@@ -150,7 +150,12 @@ const SearchCard = ({ form, loading }) => {
       </Box>
       <form onSubmit={handleSubmit}>
         <Stack spacing={2.5}>
-          <Grid container spacing={2.5} alignItems="center">
+          <Grid
+            container
+            spacing={2.5}
+            alignItems="center"
+            sx={{ position: "relative" }}
+          >
             {" "}
             {/* Origin */}
             <Grid size={{ xs: 12, md: 5.5 }}>
@@ -167,10 +172,18 @@ const SearchCard = ({ form, loading }) => {
               />
             </Grid>
             {/* Swap Button Column */}
-            <Grid
-              size={{ xs: "12", md: 1 }}
+            <Box
               sx={{
-                display: { xs: "none", md: "flex" },
+                position: { xs: "absolute", md: "static" },
+                left: { xs: "50%", md: "auto" },
+                top: { xs: "50%", md: "auto" },
+                transform: {
+                  xs: "translate(-50%, -50%) rotate(90deg)",
+                  md: "none",
+                },
+                zIndex: 2,
+
+                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -194,7 +207,7 @@ const SearchCard = ({ form, loading }) => {
               >
                 <SwapHorizIcon />
               </IconButton>
-            </Grid>
+            </Box>
             {/* Destination */}
             <Grid size={{ xs: 12, md: 5.5 }}>
               <Autocomplete
@@ -213,27 +226,6 @@ const SearchCard = ({ form, loading }) => {
           </Grid>
 
           {/* Mobile Swap Button */}
-          <Box
-            sx={{
-              display: { xs: "flex", md: "none" },
-              justifyContent: "center",
-              my: -1,
-            }}
-          >
-            <IconButton
-              onClick={swapLocations}
-              sx={{
-                width: 44,
-                height: 44,
-                background: `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.secondary.contrastText} 100%)`,
-                color: "#FFFFFF",
-                transform: "rotate(90deg)",
-                boxShadow: "0 6px 20px -3px rgba(52, 207, 194, 0.4)",
-              }}
-            >
-              <SwapHorizIcon />
-            </IconButton>
-          </Box>
 
           {/* Dates and Options Row */}
           <Grid container spacing={2.5}>
