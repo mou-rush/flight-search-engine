@@ -4,6 +4,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import InsertInvitationRoundedIcon from "@mui/icons-material/InsertInvitationRounded";
+import { alpha, useTheme } from "@mui/material/styles";
 
 const AppDatePicker = ({
   label,
@@ -16,6 +17,7 @@ const AppDatePicker = ({
   disabled = false,
   icon = InsertInvitationRoundedIcon,
 }) => {
+  const theme = useTheme();
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -32,7 +34,12 @@ const AppDatePicker = ({
             fullWidth: true,
             error,
             helperText,
-            sx: inputSx,
+            sx: {
+              ...inputSx,
+              "& .MuiSvgIcon-root": {
+                color: alpha(theme.palette.secondary.main, 0.6),
+              },
+            },
           },
         }}
       />

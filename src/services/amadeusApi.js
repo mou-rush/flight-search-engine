@@ -2,6 +2,7 @@ import axios from "axios";
 
 const AMADEUS_API_BASE = "https://test.api.amadeus.com/v2";
 const TOKEN_URL = "https://test.api.amadeus.com/v1/security/oauth2/token";
+const LOCATION_API_BASE = "https://test.api.amadeus.com/v1";
 
 class AmadeusService {
   constructor() {
@@ -81,6 +82,33 @@ class AmadeusService {
       }
     }
   }
+  async getLocations(keyword) {
+    try {
+      const token = await this.getAccessToken();
+
+      const response = await axios.get(
+        `${LOCATION_API_BASE}/reference-data/locations`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            keyword,
+            subType: "CITY,AIRPORT",
+          },
+        }
+      );
+
+      return response.data.data.map((item) => ({
+        code: item.iataCode,
+        city: item.address?.cityName || item.name,
+        name: item.name,
+      }));
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      return [];
+    }
+  }
 
   processFlightData(data) {
     if (!data.data || data.data.length === 0)
@@ -118,4 +146,5 @@ class AmadeusService {
 }
 
 const amadeusService = new AmadeusService();
+
 export default amadeusService;

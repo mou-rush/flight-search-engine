@@ -8,19 +8,27 @@ const Header = () => {
       sx={{
         background: "transparent",
         boxShadow: "none",
-        borderBottom: " 1px solid rgb(1, 99, 105) ",
+        borderBottom: "1px solid rgb(1, 99, 105)",
         mb: 4,
       }}
     >
-      <Toolbar>
+      <Toolbar
+        sx={{
+          justifyContent: { xs: "center", md: "flex-start" },
+        }}
+      >
         <Zoom in timeout={500}>
-          <FlightIcon sx={{ mr: 2, fontSize: 32 }} />
+          <FlightIcon sx={{ mr: 1.5, fontSize: 32 }} />
         </Zoom>
+
         <Fade in timeout={700}>
           <Typography
             variant="h5"
             component="div"
-            sx={{ flexGrow: 1, fontWeight: 700 }}
+            sx={{
+              fontWeight: 700,
+              textAlign: { xs: "center", md: "left" },
+            }}
           >
             MoSkySearch
           </Typography>
@@ -29,4 +37,5 @@ const Header = () => {
     </AppBar>
   );
 };
+
 export default Header;

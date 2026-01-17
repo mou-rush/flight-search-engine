@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Autocomplete,
   Box,
@@ -8,22 +8,51 @@ import {
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
 import FlightIcon from "@mui/icons-material/FlightTakeoff";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PropTypes from "prop-types";
+import { useDebounce } from "../../../hooks/useDebounce";
+import amadeusService from "../../../services/amadeusApi";
 
 const MoSkySearchSingleSelectComplete = ({
   value,
   onChange,
   label = "Airport",
   placeholder = "City or airport",
-  options = [],
   error = false,
   helperText = "",
   icon: InputIcon = FlightIcon,
-  renderOptionIcon: OptionIcon = FlightIcon,
+  renderOptionIcon: OptionIcon = LocationOnIcon,
   inputSx = {},
 }) => {
   const theme = useTheme();
+  const [options, setOptions] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const debouncedInput = useDebounce(inputValue, 400);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      if (!debouncedInput || debouncedInput.length < 2) {
+        setOptions([]);
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const locations = await amadeusService.getLocations(debouncedInput);
+        setOptions(locations);
+      } catch (err) {
+        console.error("Failed to fetch locations:", err);
+        setOptions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocations();
+  }, [debouncedInput]);
   return (
     <Autocomplete
       options={options}
@@ -31,25 +60,17 @@ const MoSkySearchSingleSelectComplete = ({
         `${option.city} (${option.code}) - ${option.name}`
       }
       value={value}
+      onInputChange={(_, newInput) => setInputValue(newInput)}
+      loading={loading}
       onChange={(_, newValue) => onChange(newValue)}
       renderOption={(props, option) => {
         const { key, ...restProps } = props;
         return (
           <Box component="li" key={key} {...restProps} sx={{ py: 1.5 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Box
-                sx={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 2,
-                  backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+              <Box>
                 <OptionIcon
-                  sx={{ color: theme.palette.primary.main, fontSize: 20 }}
+                  sx={{ color: theme.palette.secondary.main, fontSize: 20 }}
                 />
               </Box>
               <Box>
@@ -58,7 +79,7 @@ const MoSkySearchSingleSelectComplete = ({
                 </Typography>
                 <Typography
                   variant="caption"
-                  sx={{ color: theme.palette.text.secondary }}
+                  sx={{ color: alpha(theme.palette.text.secondary, 0.5) }}
                 >
                   {option.name}
                 </Typography>
@@ -84,9 +105,8 @@ const MoSkySearchSingleSelectComplete = ({
                     width: 40,
                     height: 40,
                     borderRadius: 2,
-                    backgroundColor: value
-                      ? alpha(theme.palette.primary.main, 0.15)
-                      : alpha(theme.palette.text.secondary, 0.08),
+                    backgroundColor: alpha(theme.palette.secondary.main, 0.15),
+
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -95,9 +115,7 @@ const MoSkySearchSingleSelectComplete = ({
                 >
                   <InputIcon
                     sx={{
-                      color: value
-                        ? theme.palette.primary.main
-                        : theme.palette.text.secondary,
+                      color: theme.palette.secondary.main,
                       fontSize: 20,
                     }}
                   />

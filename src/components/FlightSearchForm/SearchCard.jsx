@@ -1,6 +1,5 @@
 import React from "react";
 import dayjs from "dayjs";
-import { airports } from "../../constants/airports";
 import { travelClasses } from "../../constants/travelClasses";
 import {
   Box,
@@ -26,7 +25,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
-
 import { motion } from "framer-motion";
 import Autocomplete from "../Common/MoSkySearchSingleSelectComplete/MoSkySearchSingleSelectComplete";
 import theme, { inputStyle } from "../../constants/theme";
@@ -152,9 +150,10 @@ const SearchCard = ({ form, loading }) => {
       </Box>
       <form onSubmit={handleSubmit}>
         <Stack spacing={2.5}>
-          {/* Origin & Destination Row */}
-          <Grid container spacing={2.5} sx={{ position: "relative" }}>
-            <Grid size={{ xs: 12, md: 6 }}>
+          <Grid container spacing={2.5} alignItems="center">
+            {" "}
+            {/* Origin */}
+            <Grid size={{ xs: 12, md: 5.5 }}>
               <Autocomplete
                 value={origin}
                 onChange={(newValue) => {
@@ -162,25 +161,22 @@ const SearchCard = ({ form, loading }) => {
                   handleFieldChange("origin");
                 }}
                 label="From"
-                options={airports}
                 error={!!errors.origin}
                 helperText={errors.origin}
                 inputSx={inputStyle}
               />
             </Grid>
-
-            {/* Swap Button (Desktop) */}
-            <Box
+            {/* Swap Button Column */}
+            <Grid
+              size={{ xs: "12", md: 1 }}
               sx={{
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                zIndex: 10,
-                display: { xs: "none", md: "block" },
+                display: { xs: "none", md: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <IconButton
+                type="button"
                 onClick={swapLocations}
                 component={motion.button}
                 whileHover={{ scale: 1.1, rotate: 180 }}
@@ -198,9 +194,9 @@ const SearchCard = ({ form, loading }) => {
               >
                 <SwapHorizIcon />
               </IconButton>
-            </Box>
-
-            <Grid size={{ xs: 12, md: 6 }}>
+            </Grid>
+            {/* Destination */}
+            <Grid size={{ xs: 12, md: 5.5 }}>
               <Autocomplete
                 value={destination}
                 onChange={(newValue) => {
@@ -208,7 +204,6 @@ const SearchCard = ({ form, loading }) => {
                   handleFieldChange("destination");
                 }}
                 label="To"
-                options={airports}
                 error={!!errors.destination}
                 helperText={errors.destination}
                 icon={FlightLandIcon}
@@ -325,7 +320,7 @@ const SearchCard = ({ form, loading }) => {
                             height: 40,
                             borderRadius: 2,
                             backgroundColor: alpha(
-                              theme.palette.primary.main,
+                              theme.palette.secondary.main,
                               0.15
                             ),
                             display: "flex",
@@ -335,7 +330,7 @@ const SearchCard = ({ form, loading }) => {
                         >
                           <PeopleOutlineIcon
                             sx={{
-                              color: theme.palette.primary.main,
+                              color: theme.palette.secondary.main,
                               fontSize: 20,
                             }}
                           />
@@ -389,7 +384,7 @@ const SearchCard = ({ form, loading }) => {
                             height: 40,
                             borderRadius: 2,
                             backgroundColor: alpha(
-                              theme.palette.primary.main,
+                              theme.palette.secondary.main,
                               0.15
                             ),
                             display: "flex",
@@ -399,7 +394,7 @@ const SearchCard = ({ form, loading }) => {
                         >
                           <AirlineSeatReclineNormalIcon
                             sx={{
-                              color: theme.palette.primary.main,
+                              color: theme.palette.secondary.main,
                               fontSize: 20,
                             }}
                           />
